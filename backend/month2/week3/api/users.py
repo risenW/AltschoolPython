@@ -1,8 +1,11 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from uuid import UUID
 from schema import User, UserCreate, Response
 from user_service import UserService
 from utils import get_password_hash
+from typing import Annotated
+from api.dep import get_current_user
 
 router = APIRouter()
 
@@ -23,19 +26,6 @@ def add_user(user_in: UserCreate):
 
 
 # Password based authentication
-@router.get("/login", status_code=status.HTTP_200_OK)
-def login_user(email: str, password: str):
-    user_service = UserService(users)
-    user = user_service.find_user_by_email(email)
-
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-        )
-
-    if not user_service.check_password(email, password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password"
-        )
-
-    return Response(message="User logged in successfully", data=user)
+@router.get("/me", status_code=status.HTTP_200_OK)
+def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+    return current_user

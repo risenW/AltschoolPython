@@ -1,6 +1,8 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
 from uuid import UUID
 from schema import Book, BookCreate, BookUpdate, Response
+from typing import Annotated
+from api.dep import oauth2_scheme
 
 router = APIRouter()
 
@@ -8,7 +10,8 @@ books: dict[str, Book] = {}
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-def get_books():
+def get_books(token: Annotated[str, Depends(oauth2_scheme)]):
+    print(f"token: {token}")
     return books
 
 
