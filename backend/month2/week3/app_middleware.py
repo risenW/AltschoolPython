@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+import time
 
 app = FastAPI()
 
@@ -15,9 +16,12 @@ app = FastAPI()
 def log_middleware(request: Request, call_next):
     # Perform actions before the route is executed
     print(f"Request received: {request.method} {request.url}")
+    start_time = time.time()
     response = call_next(request)
-    # Perform actions after the route is executed
-    print(f"Response sent: {response.status_code}")
+    end_time = time.time()
+
+    duration = end_time - start_time
+    print(f"Duration: {duration}")
     return response
 
 

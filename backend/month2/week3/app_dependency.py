@@ -9,6 +9,8 @@ def check_token(token: str):
     if token != "secret":
         raise HTTPException(status_code=403, detail="Unauthorized")
 
+    return f"Token: {token}"
+
 
 @app.get("/items/")
 def read_items(token: Annotated[str, Depends(check_token)]):

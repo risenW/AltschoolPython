@@ -9,7 +9,12 @@ app = FastAPI()
 # Form fields are not part of the path, they are part of the request body and are sent as form data
 # encoded in the body of the request as application/x-www-form-urlencoded.
 @app.post("/login/")
-async def login(username: Annotated[str, Form()], password: Annotated[str, Form()]):
+async def login(
+    username: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    role: Annotated[str, Form()],
+):
+    print(username, password, role)
     return {"username": username}
 
 
