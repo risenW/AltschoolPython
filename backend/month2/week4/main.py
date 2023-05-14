@@ -16,8 +16,13 @@ async def users():
 
 
 @app.get("/headers")
-async def get_header(user_agent: Annotated[str | None, Header()]):
+async def get_header(
+    user_agent: Annotated[str | None, Header()] = None,
+    content_type: Annotated[str | None, Header()] = None,
+):
     # Accessing headers
+    print(user_agent)
+    print(content_type)
     return {"User-Agent": user_agent}
 
 
