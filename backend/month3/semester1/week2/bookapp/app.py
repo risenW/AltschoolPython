@@ -7,8 +7,8 @@ app = FastAPI()
 
 @app.post("/")
 def create_book(book_in: BookCreate):
-    book_id = crud_service.create_book(book_in)
-    return {"message": "Book created successfully!", "id": book_id}
+    book = crud_service.create_book(book_in)
+    return {"message": "Book created successfully!", "data": book}
 
 
 @app.get("/books", response_model=list[Book])
@@ -29,8 +29,8 @@ def get_book_id(book_id: str):
 
 @app.put("/")
 def update_book(book_id: str, book_update_in: BookUpdate):
-    crud_service.update_book(book_id, book_update_in)
-    return {"message": "Book updated successfully"}
+    book = crud_service.update_book(book_id, book_update_in)
+    return {"message": "Book updated successfully", "data": book}
 
 
 @app.delete("/")
