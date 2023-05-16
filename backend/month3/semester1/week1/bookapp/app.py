@@ -46,11 +46,19 @@ def update_book(
     book_id: UUID, book_update_in: BookUpdate, db: Session = Depends(get_db)
 ):
     book = crud_service.update_book(db, book_id, book_update_in)
+    if book is None:
+        raise HTTPException(status_code=401, detail={"message": "Book does not exists"})
+
     return {"message": "Book updated successfully", "data": book}
 
 
 @app.delete("/")
-def delete_book(book_id: UUID):
-    crud_service.delete_book(book_id)
+def delete_book(book_id: UUID, db: Session = Depends(get_db)):
+    book = crud_service.get_book_by_id(db, book_id)
+
+    if book is None:
+        raise HTTPException(status_code=401, detail={"message": "Book does not exists"})
+
+    crud_service.delete_book(db, book_id)
 
     return {"message": "Book deleted successfully"}
