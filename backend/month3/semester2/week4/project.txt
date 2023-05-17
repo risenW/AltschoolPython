@@ -1,0 +1,7 @@
+Create an end-to-end real world project using all the concepts taught in this course. 
+This project covers the following concepts:
+1. The project should use TDD
+2. The project should have atleast 10 endpoints
+3. The project should connect and use a database
+4. The project should have authentication built in
+5. The project should be production ready with security best practices, logging, rate limits built in. 
