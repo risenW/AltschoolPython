@@ -1,11 +1,11 @@
-from schemas.user import User
+from schemas.user import UserInDB
 from schemas.account import Account
 from typing import List
 
 
-def user_serializer(user) -> User:
+def user_serializer(user) -> UserInDB:
     user_dict = {
-        "id": user.get("_id"),
+        "id": str(user.get("_id")),
         "created_at": user.get("created_at"),
         "updated_at": user.get("updated_at"),
         "first_name": user.get("first_name"),
@@ -15,11 +15,10 @@ def user_serializer(user) -> User:
         "email": user.get("email"),
         "password": user.get("password"),
     }
+    return UserInDB(**user_dict)
 
-    return User(**user_dict)
 
-
-def users_serializer(users) -> List[User]:
+def users_serializer(users) -> List[UserInDB]:
     user_schemas = []
     for user in users:
         user_schemas.append(user_serializer(user))

@@ -24,7 +24,10 @@ class UserUpdate(BaseModel):
 
 
 class User(UserBase):
-    id: str
     password: str
     created_at: datetime
     updated_at: datetime
+
+
+class UserInDB(User):
+    id: str
