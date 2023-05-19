@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from serializers import user_serializer
 from fastapi.encoders import jsonable_encoder
 from utils import get_password_hash
+from pydantic import EmailStr
 
 
 class UserService:
@@ -18,6 +19,10 @@ class UserService:
         new_user = users_collection.find_one({"_id": user_id})
 
         return user_serializer(new_user)
+
+    def get_user_by_email(self, email: EmailStr):
+        user = users_collection.find_one({"email": email})
+        return user_serializer(user)
 
 
 user_service = UserService()
