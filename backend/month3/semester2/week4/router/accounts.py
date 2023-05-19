@@ -1,7 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from schemas.account import AccountCreate
 from services.account import account_service
 from deps import get_current_user
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
 
 accounts_router = APIRouter()
 
@@ -38,7 +42,10 @@ def deposit_money(amount: float, current_user=Depends(get_current_user)):
 
 
 @accounts_router.post("/withdraw/")
-def withdraw_money(amount: float, current_user=Depends(get_current_user)):
+@limiter.limit("10/minute")
+def withdraw_money(
+    amount: float, request: Request, current_user=Depends(get_current_user)
+):
     account = account_service.withdraw(amount, current_user)
 
     if not account:

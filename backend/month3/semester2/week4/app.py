@@ -8,7 +8,11 @@ from services.user import user_service
 from schemas.token import TokenData
 from config import settings
 import sentry_sdk
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
+limiter = Limiter(key_func=get_remote_address)
 
 sentry_sdk.init(
     dsn="https://eafce32009ca4105b59fe7c0a323614f@o4505201232904192.ingest.sentry.io/4505204931166208",
@@ -19,6 +23,8 @@ sentry_sdk.init(
 )
 
 app = FastAPI()
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 @app.post("/auth/token")
