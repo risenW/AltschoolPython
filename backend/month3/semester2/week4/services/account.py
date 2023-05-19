@@ -21,5 +21,20 @@ class AccountService:
 
         return account_serializer(account)
 
+    def deposit(self, amount: float, current_user: UserInDB):
+        account = accounts_collection.find_one({"user_id": current_user.id})
+        print(account)
+
+        if not account:
+            return None
+
+        account = accounts_collection.find_one_and_update(
+            {"_id": account["_id"]},
+            {"$set": {"balance": amount}},
+            return_document=True,
+        )
+
+        return account_serializer(account)
+
 
 account_service = AccountService()

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from .account import Account
 
 
 class UserBase(BaseModel):
@@ -31,3 +32,7 @@ class User(UserBase):
 
 class UserInDB(User):
     id: str
+
+
+class UserAccount(UserInDB):
+    account: Account | None = None

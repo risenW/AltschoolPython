@@ -22,3 +22,16 @@ def create_account(account_in: AccountCreate, current_user=Depends(get_current_u
         )
 
     return {"message": "Account created successfully!", "data": account}
+
+
+@accounts_router.put("/")
+def deposit_money(amount: float, current_user=Depends(get_current_user)):
+    account = account_service.deposit(amount, current_user)
+
+    if not account:
+        raise HTTPException(
+            status_code=401,
+            detail={"message": "An error occurred! we could not make the deposit"},
+        )
+
+    return {"message": "Deposit made successfully!", "data": account}

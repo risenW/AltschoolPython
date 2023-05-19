@@ -1,5 +1,5 @@
-from schemas.user import UserCreate, User
-from database import users_collection
+from schemas.user import UserCreate, User, UserAccount
+from database import users_collection, accounts_collection
 from datetime import datetime
 from bson.objectid import ObjectId
 from serializers import user_serializer
@@ -23,6 +23,21 @@ class UserService:
     def get_user_by_email(self, email: EmailStr):
         user = users_collection.find_one({"email": email})
         return user_serializer(user)
+
+    def get_user_by_id(self, id: str):
+        user = users_collection.find_one({"_id": ObjectId(id)})
+        return user_serializer(user)
+
+    def get_user_details(self, id: str) -> UserAccount | None:
+        user = self.get_user_by_id(id)
+
+        if not user:
+            return None
+
+        account = accounts_collection.find_one({"user_id": user.id})
+        user = UserAccount(**user.dict(), account=account)
+
+        return user
 
 
 user_service = UserService()

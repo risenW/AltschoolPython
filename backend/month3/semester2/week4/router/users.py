@@ -22,3 +22,16 @@ def create_user(user_in: UserCreate):
         )
 
     return {"message": "User created successfully!", "data": user}
+
+
+@users_router.get("/{id}")
+def get_user_details(id: str):
+    user = user_service.get_user_details(id)
+
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail={"message": "User not found!"},
+        )
+
+    return user
