@@ -29,6 +29,7 @@ def users_serializer(users) -> List[UserInDB]:
 def account_serializer(account):
     user_dict = {
         "id": account.get("_id"),
+        "user_id": account.get("user_id"),
         "created_at": account.get("created_at"),
         "updated_at": account.get("updated_at"),
         "balance": account.get("balance"),

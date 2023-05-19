@@ -13,7 +13,7 @@ def get_all_accounts():
 
 @accounts_router.post("/")
 def create_account(account_in: AccountCreate, current_user=Depends(get_current_user)):
-    account = account_service.create_account(account_in)
+    account = account_service.create_account(account_in, current_user)
 
     if not account:
         raise HTTPException(
